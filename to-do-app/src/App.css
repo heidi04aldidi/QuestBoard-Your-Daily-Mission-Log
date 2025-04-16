@@ -189,3 +189,110 @@ button:hover {
         font-size: 1.2rem;
     }
 }
+/* Common Styles */
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+    transition: background 0.5s, color 0.5s;
+}
+
+.App {
+    text-align: center;
+    padding: 2rem;
+}
+
+input,
+button,
+select {
+    font-family: inherit;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px auto;
+    max-width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+li:hover {
+    transform: scale(1.03);
+}
+
+/* Completed task */
+.completed .task-text {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Retro Arcade Theme */
+body.retro {
+    background-color: #1a1a1a;
+    color: #00ff99;
+}
+
+body.retro input,
+body.retro button,
+body.retro select {
+    background-color: #333;
+    color: #00ff99;
+}
+
+body.retro li {
+    background-color: #262626;
+}
+
+/* Cyberpunk Theme */
+body.cyber {
+    background-color: #0f0c29;
+    background-image: linear-gradient(315deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    color: #ff00ff;
+}
+
+body.cyber input,
+body.cyber button,
+body.cyber select {
+    background-color: #1f1a38;
+    color: #ff00ff;
+}
+
+body.cyber li {
+    background-color: #312b57;
+}
+
+/* Forest Elf Theme */
+body.forest {
+    background-color: #fdfaf0;
+    color: #065f46;
+}
+
+body.forest input,
+body.forest button,
+body.forest select {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+body.forest li {
+    background-color: #398052;
+}
+
+/* Task checkbox and text */
+.task-check {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
