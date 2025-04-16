@@ -1,22 +1,11 @@
-// App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { playSound } from './soundPlayer'; // Utility to play sounds
+import { playSound } from './soundPlayer';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState('');
-  const [level, setLevel] = useState(1);
 
-  // Level up every 5 tasks
-  useEffect(() => {
-    if (tasks.length && tasks.length % 5 === 0) {
-      setLevel(prev => prev + 1);
-      playSound('levelup.mp3');
-    }
-  }, [tasks]);
-
-  // Add task
   const addTask = () => {
     if (input.trim()) {
       setTasks([...tasks, { text: input, completed: false }]);
@@ -25,7 +14,6 @@ function App() {
     }
   };
 
-  // Delete task
   const deleteTask = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks.splice(index, 1);
@@ -33,7 +21,6 @@ function App() {
     playSound('delete.mp3');
   };
 
-  // Toggle task completion
   const toggleComplete = (index) => {
     const updatedTasks = [...tasks];
     updatedTasks[index].completed = !updatedTasks[index].completed;
@@ -44,7 +31,6 @@ function App() {
   return (
     <div className="App">
       <h1>QuestBoard 🧙‍♂️</h1>
-      <h2>Level: {level}</h2>
 
       <input
         type="text"
@@ -57,7 +43,16 @@ function App() {
       <ul>
         {tasks.map((task, index) => (
           <li key={index} className={task.completed ? 'completed' : ''}>
-            <span onClick={() => toggleComplete(index)}>{task.text}</span>
+            <label>
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleComplete(index)}
+              />
+              <span className={task.completed ? 'strikethrough' : ''}>
+                {task.text}
+              </span>
+            </label>
             <button onClick={() => deleteTask(index)}>❌</button>
           </li>
         ))}
