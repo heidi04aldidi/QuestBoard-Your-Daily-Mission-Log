@@ -1,58 +1,67 @@
-import React, { useState, useEffect } from "react";
-import { QuestForm } from "./components/QuestForm";
-import { QuestList } from "./components/QuestList";
-import { XPTracker } from "./components/XPTracker";
-import "./styles/App.css";
+// App.js
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { playSound } from './soundPlayer'; // Utility to play sounds
 
 function App() {
-  const [quests, setQuests] = useState(() => {
-    const saved = localStorage.getItem("quests");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [xp, setXp] = useState(() => {
-    const saved = localStorage.getItem("xp");
-    return saved ? JSON.parse(saved) : 0;
-  });
+  const [tasks, setTasks] = useState([]);
+  const [input, setInput] = useState('');
+  const [level, setLevel] = useState(1);
 
+  // Level up every 5 tasks
   useEffect(() => {
-    localStorage.setItem("quests", JSON.stringify(quests));
-    localStorage.setItem("xp", JSON.stringify(xp));
-  }, [quests, xp]);
+    if (tasks.length && tasks.length % 5 === 0) {
+      setLevel(prev => prev + 1);
+      playSound('levelup.mp3');
+    }
+  }, [tasks]);
 
-  const addQuest = (text) => {
-    const newQuest = {
-      id: Date.now(),
-      text,
-      completed: false,
-    };
-    setQuests([newQuest, ...quests]);
+  // Add task
+  const addTask = () => {
+    if (input.trim()) {
+      setTasks([...tasks, { text: input, completed: false }]);
+      setInput('');
+      playSound('add.mp3');
+    }
   };
 
-  const toggleQuest = (id) => {
-    setQuests(
-      quests.map((q) => {
-        if (q.id === id && !q.completed) {
-          setXp(xp + 10);
-        }
-        return q.id === id ? { ...q, completed: !q.completed } : q;
-      })
-    );
+  // Delete task
+  const deleteTask = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+    playSound('delete.mp3');
   };
 
-  const deleteQuest = (id) => {
-    setQuests(quests.filter((q) => q.id !== id));
+  // Toggle task completion
+  const toggleComplete = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].completed = !updatedTasks[index].completed;
+    setTasks(updatedTasks);
+    playSound('complete.mp3');
   };
 
   return (
-    <div className="app-container">
-      <h1 className="title">🎮 QuestBoard</h1>
-      <XPTracker xp={xp} />
-      <QuestForm addQuest={addQuest} />
-      <QuestList
-        quests={quests}
-        toggleQuest={toggleQuest}
-        deleteQuest={deleteQuest}
+    <div className="App">
+      <h1>QuestBoard 🧙‍♂️</h1>
+      <h2>Level: {level}</h2>
+
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Add your quest..."
       />
+      <button onClick={addTask}>Add</button>
+
+      <ul>
+        {tasks.map((task, index) => (
+          <li key={index} className={task.completed ? 'completed' : ''}>
+            <span onClick={() => toggleComplete(index)}>{task.text}</span>
+            <button onClick={() => deleteTask(index)}>❌</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
